@@ -1,0 +1,5 @@
+projet/
+    app.py
+    templates/
+        index.html
+    static/
