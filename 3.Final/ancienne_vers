@@ -1,0 +1,148 @@
+from flask import Flask, request, render_template, jsonify, send_file
+from PIL import Image
+from io import BytesIO
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/convert_to_bw', methods=['POST'])
+def convert_image_to_bw():
+    try:
+        uploaded_file = request.files['file']
+        if uploaded_file.filename != '':
+            # Lire l'image téléchargée depuis la requête
+            image = Image.open(BytesIO(uploaded_file.read()))
+            bw_image = image.convert('L')  # Convertir en noir et blanc
+            output_buffer = BytesIO()
+            bw_image.save(output_buffer, format="JPEG")
+            output_buffer.seek(0)
+
+            # Envoyer l'image résultante en tant que réponse
+            return send_file(output_buffer, mimetype='image/jpeg')
+        else:
+            return jsonify(success=False, message="Aucun fichier téléchargé.")
+    except Exception as e:
+        return jsonify(success=False, message=str(e))
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/convert_to_bw', methods=['POST'])
+def convert_image_to_bw():
+    try:
+        uploaded_file = request.files['file']
+        if uploaded_file.filename != '':
+            # Lire l'image téléchargée depuis la requête
+            image = Image.open(BytesIO(uploaded_file.read()))
+            bw_image = image.convert('L')  # Convertir en noir et blanc
+            output_buffer = BytesIO()
+            bw_image.save(output_buffer, format="JPEG")
+            output_buffer.seek(0)
+
+            # Envoyer l'image résultante en tant que réponse
+            return send_file(output_buffer, mimetype='image/jpeg')
+        else:
+            return jsonify(success=False, message="Aucun fichier téléchargé.")
+    except Exception as e:
+        return jsonify(success=False, message=str(e))
+
+@app.route('/convert_to_text', methods=['POST'])
+def convert_image_to_text():
+    try:
+        uploaded_file = request.files['file']
+        if uploaded_file.filename != '':
+            # Lire l'image téléchargée depuis la requête
+            image = Image.open(BytesIO(uploaded_file.read()))
+
+            # Utilisez votre fonction pour obtenir le meilleur texte
+            meilleur_texte = meilleur_text(fonctions_pretraitement, image.tobytes())
+
+            # Créez un objet BytesIO pour stocker le texte
+            text_buffer = BytesIO()
+            text_buffer.write(meilleur_texte.encode('utf-8'))
+            text_buffer.seek(0)
+
+            # Envoyez le texte résultant en tant que réponse
+            return send_file(text_buffer, mimetype='text/plain')
+        else:
+            return jsonify(success=False, message="Aucun fichier téléchargé.")
+    except Exception as e:
+        return jsonify(success=False, message=str(e))
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+
+LAST VERSION HIHIHOHO DEMAIN EST B3ID
+@app.route('/convert_to_text', methods=['POST'])
+def convert_image_to_text():
+    try:
+        uploaded_file = request.files['file']
+        if uploaded_file.filename != '':
+            # Lire l'image téléchargée avec PIL
+            image = Image.open(uploaded_file)
+
+            # Redimensionnez l'image à une résolution plus basse (par exemple, 300 DPI)
+            image = image.resize((image.width // 3, image.height // 3))
+
+            # Utilisez votre fonction pour obtenir le meilleur texte
+            meilleur_texte = meilleur_text(fonctions_pretraitement, image.tobytes())
+
+            # Créez un objet BytesIO pour stocker le texte
+            text_buffer = BytesIO()
+            text_buffer.write(meilleur_texte.encode('utf-8'))
+            text_buffer.seek(0)
+
+            # Envoyez le texte résultant en tant que réponse
+            return send_file(text_buffer, mimetype='text/plain')
+        else:
+            return jsonify(success=False, message="Aucun fichier téléchargé.")
+    except Exception as e:
+        return jsonify(success=False, message=str(e))
+    
+
+
+
+
+    @app.route('/convert_to_text', methods=['POST'])
+def convert_image_to_text():
+    try:
+        uploaded_file = request.files['file']
+        if uploaded_file.filename != '':
+            # Lire l'image téléchargée avec PIL
+            image = Image.open(uploaded_file)
+
+            # Appelez votre fonction OCR pour obtenir le texte
+            ocr_text = ocr(np.array(image))
+            # Remplacez les \n par des sauts de ligne HTML
+
+            ocr_text_html = ocr_text.replace('\n', '<br>')
+
+            return jsonify(success=True, ocr_text=ocr_text_html)
+
+        else:
+            return jsonify(success=False, message="Aucun fichier téléchargé.")
+    except Exception as e:
+        return jsonify(success=False, message=str(e))
+
